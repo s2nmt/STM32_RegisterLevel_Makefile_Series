@@ -1,0 +1,361 @@
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.uart1_init,"ax",%progbits
+  18              		.align	1
+  19              		.global	uart1_init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	uart1_init:
+  25              	.LFB3:
+  26              		.file 1 "Core/Src/main.c"
+   1:Core/Src/main.c **** #include "main.h"
+   2:Core/Src/main.c **** #include "stdio.h"
+   3:Core/Src/main.c **** void uart1_init(void) {
+  27              		.loc 1 3 23 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+   4:Core/Src/main.c ****     // Bước 1: Bật clock cho GPIOA và USART1
+   5:Core/Src/main.c ****     RCC_APB2ENR |= (RCC_APB2ENR_IOPAEN | RCC_APB2ENR_USART1EN);
+  32              		.loc 1 5 5 view .LVU1
+  33              		.loc 1 5 17 is_stmt 0 view .LVU2
+  34 0000 134A     		ldr	r2, .L2
+  35 0002 9369     		ldr	r3, [r2, #24]
+  36 0004 43F48043 		orr	r3, r3, #16384
+  37 0008 43F00403 		orr	r3, r3, #4
+  38 000c 9361     		str	r3, [r2, #24]
+   6:Core/Src/main.c **** 
+   7:Core/Src/main.c ****     // Bước 2: Cấu hình chân PA9 là TX (AF push-pull) và PA10 là RX (input floating)
+   8:Core/Src/main.c ****     GPIOA_CRH &= ~(0xFF << 4);  // Clear bits for PA9 and PA10
+  39              		.loc 1 8 5 is_stmt 1 view .LVU3
+  40              		.loc 1 8 15 is_stmt 0 view .LVU4
+  41 000e 114B     		ldr	r3, .L2+4
+  42 0010 D3F80428 		ldr	r2, [r3, #2052]
+  43 0014 22F47F62 		bic	r2, r2, #4080
+  44 0018 C3F80428 		str	r2, [r3, #2052]
+   9:Core/Src/main.c ****     GPIOA_CRH |= (GPIO_CRH_MODE9_0 | GPIO_CRH_MODE9_1 | GPIO_CRH_CNF9_1);  // PA9 (TX)
+  45              		.loc 1 9 5 is_stmt 1 view .LVU5
+  46              		.loc 1 9 15 is_stmt 0 view .LVU6
+  47 001c D3F80428 		ldr	r2, [r3, #2052]
+  48 0020 42F0B002 		orr	r2, r2, #176
+  49 0024 C3F80428 		str	r2, [r3, #2052]
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 2
+
+
+  10:Core/Src/main.c ****     GPIOA_CRH |= (GPIO_CRH_CNF10_0);  // PA10 (RX)
+  50              		.loc 1 10 5 is_stmt 1 view .LVU7
+  51              		.loc 1 10 15 is_stmt 0 view .LVU8
+  52 0028 D3F80428 		ldr	r2, [r3, #2052]
+  53 002c 42F48072 		orr	r2, r2, #256
+  54 0030 C3F80428 		str	r2, [r3, #2052]
+  11:Core/Src/main.c **** 
+  12:Core/Src/main.c ****     // Bước 3: Cấu hình baudrate cho USART1
+  13:Core/Src/main.c ****     // Ví dụ: Với clock 72 MHz và baudrate 9600, ta cần cấu hình BRR (Baud Rate Register
+  14:Core/Src/main.c ****     // Công thức: BRR = Fclk / Baudrate
+  15:Core/Src/main.c ****     // 72,000,000 / 9600 = 7500, tương ứng với giá trị 0x1D4C
+  16:Core/Src/main.c ****     USART1_BRR = 0x0341;
+  55              		.loc 1 16 5 is_stmt 1 view .LVU9
+  56              		.loc 1 16 16 is_stmt 0 view .LVU10
+  57 0034 084A     		ldr	r2, .L2+8
+  58 0036 40F24133 		movw	r3, #833
+  59 003a C2F80838 		str	r3, [r2, #2056]
+  17:Core/Src/main.c **** 
+  18:Core/Src/main.c ****     // Bước 4: Kích hoạt UART và cho phép truyền
+  19:Core/Src/main.c ****     USART1_CR1 |= (USART_CR1_UE | USART_CR1_TE | USART_CR1_RE);
+  60              		.loc 1 19 5 is_stmt 1 view .LVU11
+  61              		.loc 1 19 16 is_stmt 0 view .LVU12
+  62 003e D2F80C38 		ldr	r3, [r2, #2060]
+  63 0042 43F40053 		orr	r3, r3, #8192
+  64 0046 43F00C03 		orr	r3, r3, #12
+  65 004a C2F80C38 		str	r3, [r2, #2060]
+  20:Core/Src/main.c **** }
+  66              		.loc 1 20 1 view .LVU13
+  67 004e 7047     		bx	lr
+  68              	.L3:
+  69              		.align	2
+  70              	.L2:
+  71 0050 00100240 		.word	1073876992
+  72 0054 00000140 		.word	1073807360
+  73 0058 00300140 		.word	1073819648
+  74              		.cfi_endproc
+  75              	.LFE3:
+  77              		.section	.text.uart1_send_char,"ax",%progbits
+  78              		.align	1
+  79              		.global	uart1_send_char
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  84              	uart1_send_char:
+  85              	.LFB4:
+  21:Core/Src/main.c **** void uart1_send_char(char c) {
+  86              		.loc 1 21 30 is_stmt 1 view -0
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 0
+  89              		@ frame_needed = 0, uses_anonymous_args = 0
+  90              		@ link register save eliminated.
+  91              	.LVL0:
+  92              	.L5:
+  22:Core/Src/main.c ****     // Chờ cho đến khi thanh ghi truyền trống (TXE = 1)
+  23:Core/Src/main.c ****     while (!(USART1_SR & USART_SR_TXE));
+  93              		.loc 1 23 40 discriminator 1 view .LVU15
+  94              		.loc 1 23 11 discriminator 1 view .LVU16
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 3
+
+
+  95              		.loc 1 23 14 is_stmt 0 discriminator 1 view .LVU17
+  96 0000 044B     		ldr	r3, .L6
+  97 0002 D3F80038 		ldr	r3, [r3, #2048]
+  98              		.loc 1 23 11 discriminator 1 view .LVU18
+  99 0006 13F0800F 		tst	r3, #128
+ 100 000a F9D0     		beq	.L5
+  24:Core/Src/main.c ****     
+  25:Core/Src/main.c ****     // Ghi dữ liệu vào thanh ghi dữ liệu (DR) để truyền
+  26:Core/Src/main.c ****     USART1_DR = c;
+ 101              		.loc 1 26 5 is_stmt 1 view .LVU19
+ 102              		.loc 1 26 15 is_stmt 0 view .LVU20
+ 103 000c 014B     		ldr	r3, .L6
+ 104 000e C3F80408 		str	r0, [r3, #2052]
+  27:Core/Src/main.c **** }
+ 105              		.loc 1 27 1 view .LVU21
+ 106 0012 7047     		bx	lr
+ 107              	.L7:
+ 108              		.align	2
+ 109              	.L6:
+ 110 0014 00300140 		.word	1073819648
+ 111              		.cfi_endproc
+ 112              	.LFE4:
+ 114              		.section	.text.uart1_send_string,"ax",%progbits
+ 115              		.align	1
+ 116              		.global	uart1_send_string
+ 117              		.syntax unified
+ 118              		.thumb
+ 119              		.thumb_func
+ 121              	uart1_send_string:
+ 122              	.LVL1:
+ 123              	.LFB5:
+  28:Core/Src/main.c **** 
+  29:Core/Src/main.c **** void uart1_send_string(char *str, int len) {
+ 124              		.loc 1 29 44 is_stmt 1 view -0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 0
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128              		.loc 1 29 44 is_stmt 0 view .LVU23
+ 129 0000 70B5     		push	{r4, r5, r6, lr}
+ 130              	.LCFI0:
+ 131              		.cfi_def_cfa_offset 16
+ 132              		.cfi_offset 4, -16
+ 133              		.cfi_offset 5, -12
+ 134              		.cfi_offset 6, -8
+ 135              		.cfi_offset 14, -4
+ 136 0002 0646     		mov	r6, r0
+ 137 0004 0D46     		mov	r5, r1
+  30:Core/Src/main.c ****     for (int i = 0; i < len; i++) {
+ 138              		.loc 1 30 5 is_stmt 1 view .LVU24
+ 139              	.LBB2:
+ 140              		.loc 1 30 10 view .LVU25
+ 141              	.LVL2:
+ 142              		.loc 1 30 14 is_stmt 0 view .LVU26
+ 143 0006 0024     		movs	r4, #0
+ 144              		.loc 1 30 5 view .LVU27
+ 145 0008 03E0     		b	.L9
+ 146              	.LVL3:
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 4
+
+
+ 147              	.L10:
+  31:Core/Src/main.c ****         uart1_send_char(str[i]); // Gửi từng ký tự đến khi hết độ dài
+ 148              		.loc 1 31 9 is_stmt 1 discriminator 3 view .LVU28
+ 149 000a 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
+ 150 000c FFF7FEFF 		bl	uart1_send_char
+ 151              	.LVL4:
+  30:Core/Src/main.c ****     for (int i = 0; i < len; i++) {
+ 152              		.loc 1 30 30 discriminator 3 view .LVU29
+  30:Core/Src/main.c ****     for (int i = 0; i < len; i++) {
+ 153              		.loc 1 30 31 is_stmt 0 discriminator 3 view .LVU30
+ 154 0010 0134     		adds	r4, r4, #1
+ 155              	.LVL5:
+ 156              	.L9:
+  30:Core/Src/main.c ****     for (int i = 0; i < len; i++) {
+ 157              		.loc 1 30 21 is_stmt 1 discriminator 1 view .LVU31
+  30:Core/Src/main.c ****     for (int i = 0; i < len; i++) {
+ 158              		.loc 1 30 5 is_stmt 0 discriminator 1 view .LVU32
+ 159 0012 AC42     		cmp	r4, r5
+ 160 0014 F9DB     		blt	.L10
+ 161              	.LBE2:
+  32:Core/Src/main.c ****     }
+  33:Core/Src/main.c **** }
+ 162              		.loc 1 33 1 view .LVU33
+ 163 0016 70BD     		pop	{r4, r5, r6, pc}
+ 164              		.loc 1 33 1 view .LVU34
+ 165              		.cfi_endproc
+ 166              	.LFE5:
+ 168              		.section	.text._write,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	_write
+ 171              		.syntax unified
+ 172              		.thumb
+ 173              		.thumb_func
+ 175              	_write:
+ 176              	.LVL6:
+ 177              	.LFB6:
+  34:Core/Src/main.c **** 
+  35:Core/Src/main.c **** int _write(int file, char *ptr, int len)
+  36:Core/Src/main.c **** {
+ 178              		.loc 1 36 1 is_stmt 1 view -0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		.loc 1 36 1 is_stmt 0 view .LVU36
+ 183 0000 10B5     		push	{r4, lr}
+ 184              	.LCFI1:
+ 185              		.cfi_def_cfa_offset 8
+ 186              		.cfi_offset 4, -8
+ 187              		.cfi_offset 14, -4
+ 188 0002 0846     		mov	r0, r1
+ 189              	.LVL7:
+ 190              		.loc 1 36 1 view .LVU37
+ 191 0004 1446     		mov	r4, r2
+  37:Core/Src/main.c ****     uart1_send_string( ptr,len);
+ 192              		.loc 1 37 5 is_stmt 1 view .LVU38
+ 193 0006 1146     		mov	r1, r2
+ 194              	.LVL8:
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 5
+
+
+ 195              		.loc 1 37 5 is_stmt 0 view .LVU39
+ 196 0008 FFF7FEFF 		bl	uart1_send_string
+ 197              	.LVL9:
+  38:Core/Src/main.c ****     return len;
+ 198              		.loc 1 38 5 is_stmt 1 view .LVU40
+  39:Core/Src/main.c **** }
+ 199              		.loc 1 39 1 is_stmt 0 view .LVU41
+ 200 000c 2046     		mov	r0, r4
+ 201 000e 10BD     		pop	{r4, pc}
+ 202              		.loc 1 39 1 view .LVU42
+ 203              		.cfi_endproc
+ 204              	.LFE6:
+ 206              		.section	.rodata.main.str1.4,"aMS",%progbits,1
+ 207              		.align	2
+ 208              	.LC0:
+ 209 0000 68656C6C 		.ascii	"hello world %.2f\015\012\000"
+ 209      6F20776F 
+ 209      726C6420 
+ 209      252E3266 
+ 209      0D0A00
+ 210              		.section	.text.main,"ax",%progbits
+ 211              		.align	1
+ 212              		.global	main
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ 217              	main:
+ 218              	.LFB7:
+  40:Core/Src/main.c **** 
+  41:Core/Src/main.c **** 
+  42:Core/Src/main.c **** int main(void) {
+ 219              		.loc 1 42 16 is_stmt 1 view -0
+ 220              		.cfi_startproc
+ 221              		@ Volatile: function does not return.
+ 222              		@ args = 0, pretend = 0, frame = 8
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224 0000 00B5     		push	{lr}
+ 225              	.LCFI2:
+ 226              		.cfi_def_cfa_offset 4
+ 227              		.cfi_offset 14, -4
+ 228 0002 83B0     		sub	sp, sp, #12
+ 229              	.LCFI3:
+ 230              		.cfi_def_cfa_offset 16
+  43:Core/Src/main.c ****     uart1_init();  // Khởi tạo UART1
+ 231              		.loc 1 43 5 view .LVU44
+ 232 0004 FFF7FEFF 		bl	uart1_init
+ 233              	.LVL10:
+ 234              	.L17:
+  44:Core/Src/main.c **** 
+  45:Core/Src/main.c ****     while (1) {
+ 235              		.loc 1 45 5 view .LVU45
+  46:Core/Src/main.c ****         printf("hello world %.2f\r\n",1.02);
+ 236              		.loc 1 46 9 view .LVU46
+ 237 0008 07A3     		adr	r3, .L19
+ 238 000a D3E90023 		ldrd	r2, [r3]
+ 239 000e 0848     		ldr	r0, .L19+8
+ 240 0010 FFF7FEFF 		bl	printf
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 6
+
+
+ 241              	.LVL11:
+  47:Core/Src/main.c ****         for (volatile int i = 0; i < 1000000; i++);  // Đợi một lúc để tránh truyền qu�
+ 242              		.loc 1 47 9 view .LVU47
+ 243              	.LBB3:
+ 244              		.loc 1 47 14 view .LVU48
+ 245              		.loc 1 47 27 is_stmt 0 view .LVU49
+ 246 0014 0023     		movs	r3, #0
+ 247 0016 0193     		str	r3, [sp, #4]
+ 248              	.L15:
+ 249              		.loc 1 47 34 is_stmt 1 discriminator 1 view .LVU50
+ 250              		.loc 1 47 36 is_stmt 0 discriminator 1 view .LVU51
+ 251 0018 019A     		ldr	r2, [sp, #4]
+ 252              		.loc 1 47 9 discriminator 1 view .LVU52
+ 253 001a 064B     		ldr	r3, .L19+12
+ 254 001c 9A42     		cmp	r2, r3
+ 255 001e F3DC     		bgt	.L17
+ 256              		.loc 1 47 51 is_stmt 1 discriminator 3 view .LVU53
+ 257              		.loc 1 47 47 discriminator 3 view .LVU54
+ 258              		.loc 1 47 48 is_stmt 0 discriminator 3 view .LVU55
+ 259 0020 019B     		ldr	r3, [sp, #4]
+ 260 0022 0133     		adds	r3, r3, #1
+ 261 0024 0193     		str	r3, [sp, #4]
+ 262 0026 F7E7     		b	.L15
+ 263              	.L20:
+ 264              		.align	3
+ 265              	.L19:
+ 266 0028 52B81E85 		.word	-2061584302
+ 267 002c EB51F03F 		.word	1072714219
+ 268 0030 00000000 		.word	.LC0
+ 269 0034 3F420F00 		.word	999999
+ 270              	.LBE3:
+ 271              		.cfi_endproc
+ 272              	.LFE7:
+ 274              		.text
+ 275              	.Letext0:
+ 276              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:18     .text.uart1_init:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:24     .text.uart1_init:00000000 uart1_init
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:71     .text.uart1_init:00000050 $d
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:78     .text.uart1_send_char:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:84     .text.uart1_send_char:00000000 uart1_send_char
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:110    .text.uart1_send_char:00000014 $d
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:115    .text.uart1_send_string:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:121    .text.uart1_send_string:00000000 uart1_send_string
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:169    .text._write:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:175    .text._write:00000000 _write
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:207    .rodata.main.str1.4:00000000 $d
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:211    .text.main:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:217    .text.main:00000000 main
+C:\Users\MINHTU~1\AppData\Local\Temp\ccQsDlID.s:266    .text.main:00000028 $d
+
+UNDEFINED SYMBOLS
+printf
