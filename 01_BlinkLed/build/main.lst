@@ -1,0 +1,190 @@
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.delay_ms,"ax",%progbits
+  18              		.align	1
+  19              		.global	delay_ms
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	delay_ms:
+  25              	.LVL0:
+  26              	.LFB0:
+  27              		.file 1 "Core/Src/main.c"
+   1:Core/Src/main.c **** // Định nghĩa các địa chỉ của thanh ghi RCC và GPIO
+   2:Core/Src/main.c **** #define RCC_APB2ENR     (*((volatile unsigned long *)0x40021018)) // Địa chỉ của RCC APB2ENR
+   3:Core/Src/main.c **** #define GPIOC_CRH       (*((volatile unsigned long *)0x40011004)) // Địa chỉ của GPIOC CRH
+   4:Core/Src/main.c **** #define GPIOC_ODR       (*((volatile unsigned long *)0x4001100C)) // Địa chỉ của GPIOC ODR
+   5:Core/Src/main.c **** 
+   6:Core/Src/main.c **** // Định nghĩa cho các bit trong thanh ghi
+   7:Core/Src/main.c **** #define RCC_IOPCEN      (1 << 4)   // Bit 4 cho phép clock GPIOC
+   8:Core/Src/main.c **** #define GPIO_MODE13_0   (1 << 20)  // MODE13[1:0] = 01 (Output mode, max speed 10 MHz)
+   9:Core/Src/main.c **** #define GPIO_MODE13_1   (1 << 21)  // MODE13[1:0] = 10 (Output mode, max speed 2 MHz)
+  10:Core/Src/main.c **** #define GPIO_CNF13_0    (1 << 22)  // CNF13[1:0] = 00 (General purpose output push-pull)
+  11:Core/Src/main.c **** 
+  12:Core/Src/main.c **** // Hàm tạo độ trễ đơn giản
+  13:Core/Src/main.c **** void delay_ms(unsigned long ms) {
+  28              		.loc 1 13 33 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  33              		.loc 1 14 5 view .LVU1
+  34              	.LBB2:
+  35              		.loc 1 14 10 view .LVU2
+  36              		.loc 1 14 24 is_stmt 0 view .LVU3
+  37 0000 0022     		movs	r2, #0
+  38              		.loc 1 14 5 view .LVU4
+  39 0002 01E0     		b	.L2
+  40              	.LVL1:
+  41              	.L3:
+  15:Core/Src/main.c ****         __asm("nop"); // Lệnh 'nop' tạo độ trễ ngắn
+  42              		.loc 1 15 9 is_stmt 1 discriminator 3 view .LVU5
+  43              		.syntax unified
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s 			page 2
+
+
+  44              	@ 15 "Core/Src/main.c" 1
+  45 0004 00BF     		nop
+  46              	@ 0 "" 2
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  47              		.loc 1 14 46 discriminator 3 view .LVU6
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  48              		.loc 1 14 47 is_stmt 0 discriminator 3 view .LVU7
+  49              		.thumb
+  50              		.syntax unified
+  51 0006 0132     		adds	r2, r2, #1
+  52              	.LVL2:
+  53              	.L2:
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  54              		.loc 1 14 31 is_stmt 1 discriminator 1 view .LVU8
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  55              		.loc 1 14 38 is_stmt 0 discriminator 1 view .LVU9
+  56 0008 4FF47A73 		mov	r3, #1000
+  57 000c 00FB03F3 		mul	r3, r0, r3
+  14:Core/Src/main.c ****     for (unsigned long i = 0; i < ms * 1000; i++) {
+  58              		.loc 1 14 5 discriminator 1 view .LVU10
+  59 0010 9342     		cmp	r3, r2
+  60 0012 F7D8     		bhi	.L3
+  61              	.LBE2:
+  16:Core/Src/main.c ****     }
+  17:Core/Src/main.c **** }
+  62              		.loc 1 17 1 view .LVU11
+  63 0014 7047     		bx	lr
+  64              		.cfi_endproc
+  65              	.LFE0:
+  67              		.section	.text.main,"ax",%progbits
+  68              		.align	1
+  69              		.global	main
+  70              		.syntax unified
+  71              		.thumb
+  72              		.thumb_func
+  74              	main:
+  75              	.LFB1:
+  18:Core/Src/main.c **** 
+  19:Core/Src/main.c **** int main(void) {
+  76              		.loc 1 19 16 is_stmt 1 view -0
+  77              		.cfi_startproc
+  78              		@ Volatile: function does not return.
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 0, uses_anonymous_args = 0
+  81 0000 08B5     		push	{r3, lr}
+  82              	.LCFI0:
+  83              		.cfi_def_cfa_offset 8
+  84              		.cfi_offset 3, -8
+  85              		.cfi_offset 14, -4
+  20:Core/Src/main.c ****     // Bước 1: Bật clock cho GPIOC (bit IOPCEN trong thanh ghi RCC_APB2ENR)
+  21:Core/Src/main.c ****     RCC_APB2ENR |= RCC_IOPCEN;
+  86              		.loc 1 21 5 view .LVU13
+  87              		.loc 1 21 17 is_stmt 0 view .LVU14
+  88 0002 104A     		ldr	r2, .L7
+  89 0004 9369     		ldr	r3, [r2, #24]
+  90 0006 43F01003 		orr	r3, r3, #16
+  91 000a 9361     		str	r3, [r2, #24]
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s 			page 3
+
+
+  22:Core/Src/main.c **** 
+  23:Core/Src/main.c ****     // Bước 2: Cấu hình chân PC13 làm output (push-pull) tốc độ 2 MHz
+  24:Core/Src/main.c ****     GPIOC_CRH &= ~(GPIO_MODE13_0 | GPIO_MODE13_1 | GPIO_CNF13_0); // Xóa các bit MODE và CNF cho
+  92              		.loc 1 24 5 is_stmt 1 view .LVU15
+  93              		.loc 1 24 15 is_stmt 0 view .LVU16
+  94 000c 0E4B     		ldr	r3, .L7+4
+  95 000e 5A68     		ldr	r2, [r3, #4]
+  96 0010 22F4E002 		bic	r2, r2, #7340032
+  97 0014 5A60     		str	r2, [r3, #4]
+  25:Core/Src/main.c ****     GPIOC_CRH |= GPIO_MODE13_1; // Đặt MODE13 thành output với tốc độ 2 MHz
+  98              		.loc 1 25 5 is_stmt 1 view .LVU17
+  99              		.loc 1 25 15 is_stmt 0 view .LVU18
+ 100 0016 5A68     		ldr	r2, [r3, #4]
+ 101 0018 42F40012 		orr	r2, r2, #2097152
+ 102 001c 5A60     		str	r2, [r3, #4]
+ 103              	.L5:
+  26:Core/Src/main.c **** 
+  27:Core/Src/main.c ****     // Bước 3: Vòng lặp chính - nhấp nháy LED
+  28:Core/Src/main.c ****     while (1) {
+ 104              		.loc 1 28 5 is_stmt 1 discriminator 1 view .LVU19
+  29:Core/Src/main.c ****         GPIOC_ODR &= ~(1 << 13); // Bật LED (PC13 = 0, LED sáng vì mạch đảo chiều)
+ 105              		.loc 1 29 9 discriminator 1 view .LVU20
+ 106              		.loc 1 29 19 is_stmt 0 discriminator 1 view .LVU21
+ 107 001e 0A4C     		ldr	r4, .L7+4
+ 108 0020 E368     		ldr	r3, [r4, #12]
+ 109 0022 23F40053 		bic	r3, r3, #8192
+ 110 0026 E360     		str	r3, [r4, #12]
+  30:Core/Src/main.c ****         delay_ms(500);           // Đợi 500ms
+ 111              		.loc 1 30 9 is_stmt 1 discriminator 1 view .LVU22
+ 112 0028 4FF4FA70 		mov	r0, #500
+ 113 002c FFF7FEFF 		bl	delay_ms
+ 114              	.LVL3:
+  31:Core/Src/main.c ****         GPIOC_ODR |= (1 << 13);  // Tắt LED (PC13 = 1, LED tắt)
+ 115              		.loc 1 31 9 discriminator 1 view .LVU23
+ 116              		.loc 1 31 19 is_stmt 0 discriminator 1 view .LVU24
+ 117 0030 E368     		ldr	r3, [r4, #12]
+ 118 0032 43F40053 		orr	r3, r3, #8192
+ 119 0036 E360     		str	r3, [r4, #12]
+  32:Core/Src/main.c ****         delay_ms(500);           // Đợi 500ms
+ 120              		.loc 1 32 9 is_stmt 1 discriminator 1 view .LVU25
+ 121 0038 4FF4FA70 		mov	r0, #500
+ 122 003c FFF7FEFF 		bl	delay_ms
+ 123              	.LVL4:
+  28:Core/Src/main.c ****         GPIOC_ODR &= ~(1 << 13); // Bật LED (PC13 = 0, LED sáng vì mạch đảo chiều)
+ 124              		.loc 1 28 11 discriminator 1 view .LVU26
+ 125 0040 EDE7     		b	.L5
+ 126              	.L8:
+ 127 0042 00BF     		.align	2
+ 128              	.L7:
+ 129 0044 00100240 		.word	1073876992
+ 130 0048 00100140 		.word	1073811456
+ 131              		.cfi_endproc
+ 132              	.LFE1:
+ 134              		.text
+ 135              	.Letext0:
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s:18     .text.delay_ms:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s:24     .text.delay_ms:00000000 delay_ms
+C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s:68     .text.main:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s:74     .text.main:00000000 main
+C:\Users\MINHTU~1\AppData\Local\Temp\ccpEnKDk.s:129    .text.main:00000044 $d
+
+NO UNDEFINED SYMBOLS
