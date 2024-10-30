@@ -1,0 +1,263 @@
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Timer2_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	Timer2_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	Timer2_Init:
+  25              	.LFB0:
+  26              		.file 1 "Core/Src/main.c"
+   1:Core/Src/main.c **** #include "main.h"
+   2:Core/Src/main.c **** #include <stdint.h>
+   3:Core/Src/main.c **** void Timer2_Init(void) {
+  27              		.loc 1 3 24 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+   4:Core/Src/main.c ****     // Bật clock cho Timer2
+   5:Core/Src/main.c ****     RCC_APB1ENR |= (1 << 0); // Bit 0 của RCC_APB1ENR là TIM2EN
+  32              		.loc 1 5 5 view .LVU1
+  33              		.loc 1 5 17 is_stmt 0 view .LVU2
+  34 0000 094A     		ldr	r2, .L2
+  35 0002 D369     		ldr	r3, [r2, #28]
+  36 0004 43F00103 		orr	r3, r3, #1
+  37 0008 D361     		str	r3, [r2, #28]
+   6:Core/Src/main.c ****     TIM2_PSC = 8000 - 1;  // Chia xung nhịp thành 1kHz (8MHz / 8000 = 1kHz)
+  38              		.loc 1 6 5 is_stmt 1 view .LVU3
+  39              		.loc 1 6 14 is_stmt 0 view .LVU4
+  40 000a 4FF08043 		mov	r3, #1073741824
+  41 000e 41F63F72 		movw	r2, #7999
+  42 0012 9A62     		str	r2, [r3, #40]
+   7:Core/Src/main.c ****     TIM2_ARR = 1000 - 1;  // Đếm đến 1000, tức 1 giây
+  43              		.loc 1 7 5 is_stmt 1 view .LVU5
+  44              		.loc 1 7 14 is_stmt 0 view .LVU6
+  45 0014 40F2E732 		movw	r2, #999
+  46 0018 DA62     		str	r2, [r3, #44]
+   8:Core/Src/main.c **** 
+   9:Core/Src/main.c ****     // Đặt thanh ghi CNT về 0 và bật Timer2
+  10:Core/Src/main.c ****     TIM2_CNT = 0;
+  47              		.loc 1 10 5 is_stmt 1 view .LVU7
+  48              		.loc 1 10 14 is_stmt 0 view .LVU8
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 2
+
+
+  49 001a 0022     		movs	r2, #0
+  50 001c 5A62     		str	r2, [r3, #36]
+  11:Core/Src/main.c ****     TIM2_CR1 |= (1 << 0); // CEN: Bit 0 của TIM2_CR1 để bật Timer2
+  51              		.loc 1 11 5 is_stmt 1 view .LVU9
+  52              		.loc 1 11 14 is_stmt 0 view .LVU10
+  53 001e 1A68     		ldr	r2, [r3]
+  54 0020 42F00102 		orr	r2, r2, #1
+  55 0024 1A60     		str	r2, [r3]
+  12:Core/Src/main.c **** }
+  56              		.loc 1 12 1 view .LVU11
+  57 0026 7047     		bx	lr
+  58              	.L3:
+  59              		.align	2
+  60              	.L2:
+  61 0028 00100240 		.word	1073876992
+  62              		.cfi_endproc
+  63              	.LFE0:
+  65              		.section	.text.delay,"ax",%progbits
+  66              		.align	1
+  67              		.global	delay
+  68              		.syntax unified
+  69              		.thumb
+  70              		.thumb_func
+  72              	delay:
+  73              	.LVL0:
+  74              	.LFB1:
+  13:Core/Src/main.c **** void delay(uint32_t ms) {
+  75              		.loc 1 13 25 is_stmt 1 view -0
+  76              		.cfi_startproc
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  14:Core/Src/main.c ****     for (uint32_t i = 0; i < ms; i++) {
+  80              		.loc 1 14 5 view .LVU13
+  81              	.LBB2:
+  82              		.loc 1 14 10 view .LVU14
+  83              		.loc 1 14 19 is_stmt 0 view .LVU15
+  84 0000 0022     		movs	r2, #0
+  85              		.loc 1 14 5 view .LVU16
+  86 0002 10E0     		b	.L5
+  87              	.LVL1:
+  88              	.L7:
+  15:Core/Src/main.c ****         TIM2_CNT = 0;  // Reset bộ đếm
+  89              		.loc 1 15 9 is_stmt 1 view .LVU17
+  90              		.loc 1 15 18 is_stmt 0 view .LVU18
+  91 0004 4FF08043 		mov	r3, #1073741824
+  92 0008 0021     		movs	r1, #0
+  93 000a 5962     		str	r1, [r3, #36]
+  16:Core/Src/main.c ****         while (!(TIM2_SR & (1 << 0))); // Chờ cờ UIF được set (Timer đếm hết chu kỳ)
+  94              		.loc 1 16 9 is_stmt 1 view .LVU19
+  95              	.L6:
+  96              		.loc 1 16 38 discriminator 1 view .LVU20
+  97              		.loc 1 16 15 discriminator 1 view .LVU21
+  98              		.loc 1 16 18 is_stmt 0 discriminator 1 view .LVU22
+  99 000c 4FF08043 		mov	r3, #1073741824
+ 100 0010 1B69     		ldr	r3, [r3, #16]
+ 101              		.loc 1 16 15 discriminator 1 view .LVU23
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 3
+
+
+ 102 0012 13F0010F 		tst	r3, #1
+ 103 0016 F9D0     		beq	.L6
+  17:Core/Src/main.c ****         TIM2_SR &= ~(1 << 0); // Xóa cờ UIF để chuẩn bị cho chu kỳ tiếp theo
+ 104              		.loc 1 17 9 is_stmt 1 discriminator 2 view .LVU24
+ 105              		.loc 1 17 17 is_stmt 0 discriminator 2 view .LVU25
+ 106 0018 4FF08041 		mov	r1, #1073741824
+ 107 001c 0B69     		ldr	r3, [r1, #16]
+ 108 001e 23F00103 		bic	r3, r3, #1
+ 109 0022 0B61     		str	r3, [r1, #16]
+  14:Core/Src/main.c ****         TIM2_CNT = 0;  // Reset bộ đếm
+ 110              		.loc 1 14 34 is_stmt 1 discriminator 2 view .LVU26
+  14:Core/Src/main.c ****         TIM2_CNT = 0;  // Reset bộ đếm
+ 111              		.loc 1 14 35 is_stmt 0 discriminator 2 view .LVU27
+ 112 0024 0132     		adds	r2, r2, #1
+ 113              	.LVL2:
+ 114              	.L5:
+  14:Core/Src/main.c ****         TIM2_CNT = 0;  // Reset bộ đếm
+ 115              		.loc 1 14 26 is_stmt 1 discriminator 1 view .LVU28
+  14:Core/Src/main.c ****         TIM2_CNT = 0;  // Reset bộ đếm
+ 116              		.loc 1 14 5 is_stmt 0 discriminator 1 view .LVU29
+ 117 0026 8242     		cmp	r2, r0
+ 118 0028 ECD3     		bcc	.L7
+ 119              	.LBE2:
+  18:Core/Src/main.c ****     }
+  19:Core/Src/main.c **** }
+ 120              		.loc 1 19 1 view .LVU30
+ 121 002a 7047     		bx	lr
+ 122              		.cfi_endproc
+ 123              	.LFE1:
+ 125              		.section	.text.main,"ax",%progbits
+ 126              		.align	1
+ 127              		.global	main
+ 128              		.syntax unified
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	main:
+ 133              	.LFB2:
+  20:Core/Src/main.c **** int main(void) {
+ 134              		.loc 1 20 16 is_stmt 1 view -0
+ 135              		.cfi_startproc
+ 136              		@ Volatile: function does not return.
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139 0000 08B5     		push	{r3, lr}
+ 140              	.LCFI0:
+ 141              		.cfi_def_cfa_offset 8
+ 142              		.cfi_offset 3, -8
+ 143              		.cfi_offset 14, -4
+  21:Core/Src/main.c ****     // Bật clock cho GPIOC
+  22:Core/Src/main.c ****     RCC_APB2ENR |= (1 << 4); // Bit 4 của RCC_APB2ENR là IOPCEN cho GPIOC
+ 144              		.loc 1 22 5 view .LVU32
+ 145              		.loc 1 22 17 is_stmt 0 view .LVU33
+ 146 0002 104A     		ldr	r2, .L11
+ 147 0004 9369     		ldr	r3, [r2, #24]
+ 148 0006 43F01003 		orr	r3, r3, #16
+ 149 000a 9361     		str	r3, [r2, #24]
+  23:Core/Src/main.c **** 
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 4
+
+
+  24:Core/Src/main.c ****     // Cấu hình PC13 làm output push-pull
+  25:Core/Src/main.c ****     GPIOC_CRH &= ~(0xF << 20);  // Xóa các bit cấu hình cũ của PC13
+ 150              		.loc 1 25 5 is_stmt 1 view .LVU34
+ 151              		.loc 1 25 15 is_stmt 0 view .LVU35
+ 152 000c 0E4B     		ldr	r3, .L11+4
+ 153 000e 5A68     		ldr	r2, [r3, #4]
+ 154 0010 22F47002 		bic	r2, r2, #15728640
+ 155 0014 5A60     		str	r2, [r3, #4]
+  26:Core/Src/main.c ****     GPIOC_CRH |= (0x1 << 20);   // MODE13[1:0] = 01 (output 10MHz), CNF13[1:0] = 00 (push-pull)
+ 156              		.loc 1 26 5 is_stmt 1 view .LVU36
+ 157              		.loc 1 26 15 is_stmt 0 view .LVU37
+ 158 0016 5A68     		ldr	r2, [r3, #4]
+ 159 0018 42F48012 		orr	r2, r2, #1048576
+ 160 001c 5A60     		str	r2, [r3, #4]
+  27:Core/Src/main.c **** 
+  28:Core/Src/main.c ****     // Khởi tạo Timer2
+  29:Core/Src/main.c ****     Timer2_Init();
+ 161              		.loc 1 29 5 is_stmt 1 view .LVU38
+ 162 001e FFF7FEFF 		bl	Timer2_Init
+ 163              	.LVL3:
+ 164              	.L9:
+  30:Core/Src/main.c **** 
+  31:Core/Src/main.c ****     // Vòng lặp chính - nhấp nháy LED
+  32:Core/Src/main.c ****     while (1) {
+ 165              		.loc 1 32 5 discriminator 1 view .LVU39
+  33:Core/Src/main.c ****         GPIOC_ODR &= ~(1 << 13); 
+ 166              		.loc 1 33 9 discriminator 1 view .LVU40
+ 167              		.loc 1 33 19 is_stmt 0 discriminator 1 view .LVU41
+ 168 0022 094C     		ldr	r4, .L11+4
+ 169 0024 E368     		ldr	r3, [r4, #12]
+ 170 0026 23F40053 		bic	r3, r3, #8192
+ 171 002a E360     		str	r3, [r4, #12]
+  34:Core/Src/main.c ****         delay(1);          
+ 172              		.loc 1 34 9 is_stmt 1 discriminator 1 view .LVU42
+ 173 002c 0120     		movs	r0, #1
+ 174 002e FFF7FEFF 		bl	delay
+ 175              	.LVL4:
+  35:Core/Src/main.c ****         GPIOC_ODR |= (1 << 13);  
+ 176              		.loc 1 35 9 discriminator 1 view .LVU43
+ 177              		.loc 1 35 19 is_stmt 0 discriminator 1 view .LVU44
+ 178 0032 E368     		ldr	r3, [r4, #12]
+ 179 0034 43F40053 		orr	r3, r3, #8192
+ 180 0038 E360     		str	r3, [r4, #12]
+  36:Core/Src/main.c ****         delay(1);           
+ 181              		.loc 1 36 9 is_stmt 1 discriminator 1 view .LVU45
+ 182 003a 0120     		movs	r0, #1
+ 183 003c FFF7FEFF 		bl	delay
+ 184              	.LVL5:
+  32:Core/Src/main.c ****         GPIOC_ODR &= ~(1 << 13); 
+ 185              		.loc 1 32 11 discriminator 1 view .LVU46
+ 186 0040 EFE7     		b	.L9
+ 187              	.L12:
+ 188 0042 00BF     		.align	2
+ 189              	.L11:
+ 190 0044 00100240 		.word	1073876992
+ 191 0048 00100140 		.word	1073811456
+ 192              		.cfi_endproc
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 5
+
+
+ 193              	.LFE2:
+ 195              		.text
+ 196              	.Letext0:
+ 197              		.file 2 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ 198              		.file 3 "c:\\program files (x86)\\gnu arm embedded toolchain\\10 2021.10\\arm-none-eabi\\include\\
+ARM GAS  C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:18     .text.Timer2_Init:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:24     .text.Timer2_Init:00000000 Timer2_Init
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:61     .text.Timer2_Init:00000028 $d
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:66     .text.delay:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:72     .text.delay:00000000 delay
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:126    .text.main:00000000 $t
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:132    .text.main:00000000 main
+C:\Users\MINHTU~1\AppData\Local\Temp\ccWW4kZY.s:190    .text.main:00000044 $d
+
+NO UNDEFINED SYMBOLS

@@ -2,7 +2,7 @@
 
 // Hàm tạo độ trễ đơn giản
 void delay_ms(unsigned long ms) {
-    for (unsigned long i = 0; i < ms * 1000; i++) {
+    for (unsigned long i = 0; i < ms*1000; i++) {
         __asm("nop"); 
     }
 }
@@ -17,9 +17,9 @@ int main(void) {
 
     // Bước 3: Vòng lặp chính - nhấp nháy LED
     while (1) {
-        GPIOC_ODR &= ~(1 << 13); // Bật LED (PC13 = 0, LED sáng vì mạch đảo chiều)
-        delay_ms(1000);           // Đợi 500ms
-        GPIOC_ODR |= (1 << 13);  // Tắt LED (PC13 = 1, LED tắt)
-        delay_ms(1000);           // Đợi 500ms
+        GPIOC_ODR &= ~(1 << 13); 
+        delay_ms(1000);           
+        GPIOC_ODR |= (1 << 13); 
+        delay_ms(1000);          
     }
 }
