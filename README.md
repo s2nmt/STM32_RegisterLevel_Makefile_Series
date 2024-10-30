@@ -2,7 +2,9 @@
 
 ## Components
 **Lesson 1:** Blink Led
+
 **Lesson 2:** Uart
+
 **Lesson 3:** Timer
 
 I hope this is useful for everyone.
