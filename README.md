@@ -1,4 +1,4 @@
-# Series on learning STM32 with Low-Level Register Programming and Using Makefile
+# Series on learning STM32 with Low-Level Register Programming
 
 ## Components
 **Lesson 1:** Blink Led
